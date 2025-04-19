@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register for Open Day</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    {% include 'index1.twig' %}
+
+    <main class="site-main">
+        <section class="content-section">
+            <h1>Register for Open Day</h1>
+            <form action="register.php" method="post">
+                <div>
+                    <label for="full_name">Full name:</label>
+                    <input type="text" id="full_name" name="full_name" value="{{ fullName ?? '' }}">
+                    {% if errors.full_name %}
+                        <p class="error-message">{{ errors.full_name }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" value="{{ email ?? '' }}">
+                    {% if errors.email %}
+                        <p class="error-message">{{ errors.email }}</p>
+                    {% endif %}
+                </div>
+
+                <div>
+                    <label for="study_level" class="form-label">Study Level:</label>
+                    <select id="study_level" name="study_level" class="form-select" required>
+                        <option value="" disabled selected>Select your study level</option>
+                        <option value="Undergraduate">Undergraduate</option>
+                        <option value="Postgraduate">Postgraduate</option>
+                        <option value="PhD">PhD</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label for="subject_interest" class="form-label">Subject of Interest:</label>
+                    <select id="subject_interest" name="subject_interest" class="form-select" required>
+                        <option value="" disabled selected>Select your subject of interest</option>
+                        <option value="Maths">Maths</option>
+                        <option value="Engineering">Engineering</option>
+                        <option value="Cybersecurity">Cybersecurity</option>
+                        <option value="Computer Science">Computer Science</option>
+                    </select>
+                </div>
+
+                    <label for="guests" class="form-label">Number of Guests:</label>
+                    <select id="guests" name="guests" class="form-select" required>
+                        <option value="" disabled selected>Select number of guests</option>
+                        <option value="0">0</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                    </select>
+                </div>
+
+                <div>
+                    <button type="submit" class="button">Register</button>
+                    <button type="button" class="btn btn-danger btn-sm deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Delete Registration</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="delete.php" method="post" id="delete-form">
+                        <input type="email" class="form-control mb-2" id="delete_email" name="delete_email" placeholder="Enter your email" required>
+                        {% if delete_errors.delete_email %}
+                            <p class="error-message text-danger">{{ delete_errors.delete_email }}</p>
+                        {% endif %}
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary" form="delete-form">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% if show_delete_modal %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var deleteModal = new bootstrap.Modal(document.getElementById('deleteModal'));
+                deleteModal.show();
+            });
+        </script>
+    {% endif %}
+
+    {% include 'index2.twig' %}
+
+
+<!-- Include Bootstrap -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+
+</body>
+</html>
