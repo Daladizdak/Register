@@ -12,6 +12,10 @@ use Twig\Loader\FilesystemLoader;
 $loader = new FilesystemLoader('templates');
 $twig = new Environment($loader);
 
+// Initialize variables
+$delete_errors = [];
+$show_delete_modal = false;
+
 // Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate email
@@ -48,15 +52,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
     }
 
-    // If there are errors, render the registration form with modal open and errors
-    echo $twig->render('register.twig', [
-        'delete_errors' => $delete_errors,
-        'show_delete_modal' => true
-    ]);
-    exit;
+    // Store errors in session temporarily
+    $_SESSION['delete_errors'] = $delete_errors;
+    $show_delete_modal = true;
 }
 
-// If not a POST request, redirect to registration page
-header("Location: register.php");
+// Render the registration form
+echo $twig->render('register.twig', [
+    'delete_errors' => isset($_SESSION['delete_errors']) ? $_SESSION['delete_errors'] : [],
+    'show_delete_modal' => $show_delete_modal,
+    'delete_success' => isset($_SESSION['delete_success']) ? $_SESSION['delete_success'] : null
+]);
+
+// Clear session variables after rendering to prevent persistence
+unset($_SESSION['delete_errors']);
+unset($_SESSION['delete_success']);
 exit;
 ?>
