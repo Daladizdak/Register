@@ -98,6 +98,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $templateVars['success_message'] = $_SESSION['delete_success'];
         unset($_SESSION['delete_success']);
     }
-    echo $twig->render('register.twig', $templateVars);
+    echo $twig->render('success.php', $templateVars);
 }
 ?>
